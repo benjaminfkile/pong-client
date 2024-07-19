@@ -1,18 +1,18 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { updatePaddlePosition } from '../actions/paddleActions';
+import { createReducer } from '@reduxjs/toolkit'
+import { playerPaddlePostion } from '../actions/gameActions'
 
 interface PaddleState {
-    position: number;
+    position: number
 }
 
 const initialState: PaddleState = {
-    position: 0, // Initial position of the paddle
-};
+    position: 0,
+}
 
 const paddleReducer = createReducer(initialState, (builder) => {
-    builder.addCase(updatePaddlePosition, (state, action) => {
-        state.position = action.payload;
-    });
-});
+    builder.addCase(playerPaddlePostion, (state, action) => {
+        state.position = action.payload
+    })
+})
 
-export default paddleReducer;
+export default paddleReducer

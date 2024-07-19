@@ -1,24 +1,24 @@
 import React, { FunctionComponent, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import PlayerPaddle from './game_components/PlayerPaddle';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import socketIOMessage from '@/socket_io/SocketIOClient';
+import socketIOClient from '@/socket_io/SocketIOClient';
 
 const Game: FunctionComponent = () => {
   useEffect(() => {
-    // Lock the screen orientation to landscape
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    socketIOMessage.init()
+    socketIOClient.init()
 
     return () => {
       // Unlock the screen orientation when the component unmounts
-      socketIOMessage.disconnect()
+      socketIOClient.disconnect()
       ScreenOrientation.unlockAsync();
     };
   }, []);
 
   return (
     <View style={styles.game}>
+      <StatusBar hidden={true} />
       <PlayerPaddle />
     </View>
   );

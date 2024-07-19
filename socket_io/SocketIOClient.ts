@@ -1,14 +1,15 @@
+//@ts-ignore
 import { io, Socket } from 'socket.io-client';
 import { Dimensions } from 'react-native';
 import { DeviceMotion } from 'expo-sensors';
 import { SERVER_URL } from '@env';
-import GameDimensions_I from '@/app/interfaces/GameDimensions_I';
-import store from '@/store';
-import { updatePaddlePosition } from '@/store/actions/paddleActions';
+import { playerPaddlePostion } from '@/store/actions/gameActions';
+import GameDimensions from '@/types/GameDimensions';
+import store from '@/store/store';
 
 let socket: Socket;
 
-const socketIOMessage = {
+const socketIOClient = {
   gameDimensions: { width: 0, height: 0 },
   previousPosition: 0,
   alpha: 0.3,
@@ -24,24 +25,22 @@ const socketIOMessage = {
       console.log('Disconnected from server');
     });
 
-    socket.on('message', (message: string) => {
-      console.log('Received message:', message);
+    socket.on('sendGame', (game: any) => {
+      console.log('Received game data:', game);
+      // Handle game data, update Redux store or local state
     });
-
-    socketIOMessage.sendGameDimensions();
-    socketIOMessage.startDeviceMotionUpdates();
   },
 
   sendGameDimensions: (): void => {
     const { width, height } = Dimensions.get('window');
-    const dimensions: GameDimensions_I = { width, height };
-    socketIOMessage.gameDimensions = dimensions;
+    const dimensions: GameDimensions = { width, height };
+    socketIOClient.gameDimensions = dimensions;
     console.log('Sending game dimensions:', dimensions); // Debugging log
     socket.emit('gameDimensions', dimensions);
   },
 
   startDeviceMotionUpdates: (): void => {
-    const { gameDimensions } = socketIOMessage;
+    const { gameDimensions } = socketIOClient;
     const paddleHeight = 100;
     DeviceMotion.setUpdateInterval(100); // Update interval in ms
 
@@ -51,14 +50,14 @@ const socketIOMessage = {
         const position = middle + (motionData.accelerationIncludingGravity.z * 100);
 
         // Apply low-pass filter for smoother movement
-        const smoothedPosition = socketIOMessage.alpha * position + (1 - socketIOMessage.alpha) * socketIOMessage.previousPosition;
-        socketIOMessage.previousPosition = smoothedPosition;
+        const smoothedPosition = socketIOClient.alpha * position + (1 - socketIOClient.alpha) * socketIOClient.previousPosition;
+        socketIOClient.previousPosition = smoothedPosition;
 
         // Clamp the smoothed position to ensure the paddle stays within the screen bounds
         const clampedPosition = Math.max(0, Math.min(smoothedPosition, gameDimensions.height - paddleHeight));
 
         // console.log(clampedPosition);
-        store.dispatch(updatePaddlePosition(clampedPosition));
+        store.dispatch(playerPaddlePostion(clampedPosition));
       } else {
         console.log("no data");
       }
@@ -72,4 +71,4 @@ const socketIOMessage = {
   },
 };
 
-export default socketIOMessage;
+export default socketIOClient;

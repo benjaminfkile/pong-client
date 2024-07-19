@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start -- tunnel --port 50001",
+    "start": "expo start --port 50001",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -42,7 +42,8 @@
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
     "socket.io-client": "^4.7.5",
-    "expo-screen-orientation": "~7.0.5"
+    "expo-screen-orientation": "~7.0.5",
+    "expo-dev-client": "~4.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
