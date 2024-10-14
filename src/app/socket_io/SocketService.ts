@@ -16,7 +16,7 @@ const socketService = {
           console.log("Connected to server via socket:", this.socket.id)
           const deviceId = getDeviceId()
           const username = null//!!!!!!
-          this.socket.emit("join_online", {deviceId: deviceId, username: username})
+          this.socket.emit("join_online", { deviceId: deviceId, username: username })
           this.startHeartbeat()
           updateState("appState", [
             { key: "socketId", value: this.socket.id },
@@ -53,7 +53,7 @@ const socketService = {
 
   startHeartbeat: () => {
     setInterval(() => {
-      socketService.emit("heartbeat", { playerId: socketService.socket.id })
+      socketService.emit("heartbeat", { deviceId: getDeviceId() })
     }, process.env.REACT_APP_HEARTBEAT_INTERVAL ? parseInt(process.env.REACT_APP_HEARTBEAT_INTERVAL) : 15000)
   },
 
