@@ -3,6 +3,8 @@ import socketService from "./socket_io/SocketService"
 import stateService from "../stateManagement/StateService"
 import I_App from "../interfaces/I_App"
 import OnlinePlayers from "./components/online_players/OnlinePlayers"
+import MyChallenges from "./components/my_challenges/MyChallenges"
+import ChallengeAnswer from "./components/challenge_answer/ChallengeAnswer"
 
 
 const App: FunctionComponent<{}> = () => {
@@ -11,7 +13,7 @@ const App: FunctionComponent<{}> = () => {
   const { socketId } = state
 
   useEffect(() => {
-    const url = process.env.REACT_APP_API_URL || 'http://localhost:8000'
+    const url = process.env.REACT_APP_API_URL || ""
 
     const initializeSocketConnection = async () => {
       try {
@@ -25,10 +27,6 @@ const App: FunctionComponent<{}> = () => {
 
     initializeSocketConnection()
 
-    socketService.on('receive_private_message', (data) => {
-      console.log('Private message received:', data.message);
-    });
-
     return () => {
       unsubscribe()
       socketService.disconnect()
@@ -36,13 +34,15 @@ const App: FunctionComponent<{}> = () => {
 
   }, [manageSubscriptionAndStateUpdate])
 
-  console.log(state)
+  //console.log(state)
 
   return (
     <div className="App">
       {socketId &&
         <>
           <OnlinePlayers />
+          <MyChallenges />
+          <ChallengeAnswer/>
         </>
       }
     </div>

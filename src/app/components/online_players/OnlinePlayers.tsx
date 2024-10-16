@@ -3,8 +3,8 @@ import stateService from "../../../stateManagement/StateService"
 import socketService from "../../socket_io/SocketService"
 import onlinePlayersCrudService from "../../../crud/OnlinePlayersCrudService"
 import I_OnlinePlayers from "../../../interfaces/I_OnlinePlayersState"
-import "./OnlinePlayers.css"
 import getLocalUserId from "../../utils/getLocalUserId"
+import "./OnlinePlayers.css"
 
 const OnlinePlayers: FunctionComponent<{}> = () => {
 
@@ -26,20 +26,31 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
 
     }, [manageSubscriptionAndStateUpdate])
 
-    console.log(state)
+    //console.log(state)
 
     return (
         <div className="OnlinePlayers">
+
+            <p>{`local userId ${getLocalUserId()}`}</p>
+
+            <br></br>
+
             {onlinePlayers.map((player, i) =>
                 <div
                     key={i}
+                    className="OnlinePlayerListitem"
                     onClick={() => {
                         const targetUserId = player.user_id
-                        const message = `msg from: ${getLocalUserId()}`
-                        socketService.emit('send_private_message', { targetUserId, message });
+                        const message = {userId: getLocalUserId()}
+                        socketService.emit('send_challenge', { targetUserId, message });
                     }}
                 >
                     {player.user_id}
+                    <button
+                            onClick={() => null}
+                    >
+                        Challenge
+                    </button>
                 </div>
             )}
         </div>
