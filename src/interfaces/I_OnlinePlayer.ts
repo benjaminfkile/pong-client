@@ -1,7 +1,6 @@
 interface I_OnlinePlayer {
     id: number;                     
-    device_id: string;               
-    user_id: number | null;          
+    user_id: string          
     socket_id: string;               
     last_active: Date;               
     created_at: Date;                

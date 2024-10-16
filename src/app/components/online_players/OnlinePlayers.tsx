@@ -4,6 +4,7 @@ import socketService from "../../socket_io/SocketService"
 import onlinePlayersCrudService from "../../../crud/OnlinePlayersCrudService"
 import I_OnlinePlayers from "../../../interfaces/I_OnlinePlayersState"
 import "./OnlinePlayers.css"
+import getLocalUserId from "../../utils/getLocalUserId"
 
 const OnlinePlayers: FunctionComponent<{}> = () => {
 
@@ -30,8 +31,15 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
     return (
         <div className="OnlinePlayers">
             {onlinePlayers.map((player, i) =>
-                <div key={i}>
-                    {player.device_id}
+                <div
+                    key={i}
+                    onClick={() => {
+                        const targetUserId = player.user_id
+                        const message = `msg from: ${getLocalUserId()}`
+                        socketService.emit('send_private_message', { targetUserId, message });
+                    }}
+                >
+                    {player.user_id}
                 </div>
             )}
         </div>

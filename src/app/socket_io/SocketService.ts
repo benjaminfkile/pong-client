@@ -1,6 +1,6 @@
 import io from "socket.io-client"
 import stateService from "../../stateManagement/StateService"
-import getDeviceId from "../utils/getDeviceId"
+import getLocalUserId from "../utils/getLocalUserId"
 
 const { updateState } = stateService
 
@@ -14,13 +14,13 @@ const socketService = {
       return new Promise((resolve, reject) => {
         this.socket.on("connect", () => {
           console.log("Connected to server via socket:", this.socket.id)
-          const deviceId = getDeviceId()
+          const userId = getLocalUserId()
           const username = null//!!!!!!
-          this.socket.emit("join_online", { deviceId: deviceId, username: username })
+          this.socket.emit("join_online", { userId: userId, username: username })
           this.startHeartbeat()
           updateState("appState", [
             { key: "socketId", value: this.socket.id },
-            { key: "deviceId", value: deviceId }
+            { key: "userId", value: userId }
           ])
           resolve()
         })
@@ -53,7 +53,7 @@ const socketService = {
 
   startHeartbeat: () => {
     setInterval(() => {
-      socketService.emit("heartbeat", { deviceId: getDeviceId() })
+      socketService.emit("heartbeat", { userId: getLocalUserId() })
     }, process.env.REACT_APP_HEARTBEAT_INTERVAL ? parseInt(process.env.REACT_APP_HEARTBEAT_INTERVAL) : 15000)
   },
 

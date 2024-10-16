@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useState } from "react"
 import socketService from "./socket_io/SocketService"
 import stateService from "../stateManagement/StateService"
 import I_App from "../interfaces/I_App"
-import OnlineonlinePlayersState from "./components/online_players/OnlinePlayers"
+import OnlinePlayers from "./components/online_players/OnlinePlayers"
 
 
 const App: FunctionComponent<{}> = () => {
@@ -25,6 +25,10 @@ const App: FunctionComponent<{}> = () => {
 
     initializeSocketConnection()
 
+    socketService.on('receive_private_message', (data) => {
+      console.log('Private message received:', data.message);
+    });
+
     return () => {
       unsubscribe()
       socketService.disconnect()
@@ -36,9 +40,11 @@ const App: FunctionComponent<{}> = () => {
 
   return (
     <div className="App">
-      {socketId && <>
-        <OnlineonlinePlayersState />
-      </>}
+      {socketId &&
+        <>
+          <OnlinePlayers />
+        </>
+      }
     </div>
   )
 }
