@@ -4,8 +4,10 @@ import stateService from "../../../stateManagement/StateService"
 import socketService from "../../socket_io/SocketService"
 import I_MyChallenges from "../../../interfaces/I_MyChallenges"
 import I_Challenge from "../../../interfaces/I_Challenge"
-import "./MyChallenges.css"
 import getLocalUserId from "../../utils/getLocalUserId"
+import I_SendChallengePayload from "../../../interfaces/I_SendChallengePayload"
+import I_AcceptOrDeclinePayload from "../../../interfaces/I_AcceptOrDeclinePayload"
+import "./MyChallenges.css"
 
 const MyChallenges: FunctionComponent<{}> = () => {
 
@@ -17,10 +19,13 @@ const MyChallenges: FunctionComponent<{}> = () => {
 
         const unsubscribe = manageSubscriptionAndStateUpdate(setState, "myChallengesState")
 
-        socketService.on('receive_challenge', (data) => {
-            console.log("receive_challenge", data)
+        socketService.on('receive_challenge', (payload: I_SendChallengePayload) => {
+            console.log("receive_challenge", payload)
+            const { message } = payload
             let updatedChallenges = [...challenges]
-            updatedChallenges.unshift({ userId: data.message.userId })
+
+            updatedChallenges.unshift({ userId: message })
+
             updateState("myChallengesState", [
                 { key: "showChallenges", value: true },
                 { key: "challenges", value: updatedChallenges }
@@ -33,23 +38,17 @@ const MyChallenges: FunctionComponent<{}> = () => {
 
     }, [manageSubscriptionAndStateUpdate])
 
-    const handleAccept = (challenge: I_Challenge) => {
-        const challengerId = challenge.userId;
-        const challengedId = getLocalUserId();
-        socketService.emit('accept_challenge', { challengerId, challengedId });
+    const handelAcceptOrDecline = (challenge: I_Challenge, prefix: "accept" | "decline") => {
+
+        const payload: I_AcceptOrDeclinePayload = {
+            challengerUserId: challenge.userId,
+            challengeRecipientUserId: getLocalUserId()
+        }
+
+        socketService.emit(`${prefix}_challenge`, payload);
 
         const updatedChallenges = challenges.filter(c => c.userId !== challenge.userId);
-        updateState("myChallengesState", [
-            { key: "challenges", value: updatedChallenges },
-            { key: "showChallenges", value: updatedChallenges.length > 0 }
-        ]);
-    };
 
-    const handleDecline = (challenge: I_Challenge) => {
-        const challengerId = challenge.userId;
-        const challengedId = getLocalUserId();
-        socketService.emit('decline_challenge', { challengerId, challengedId });
-        const updatedChallenges = challenges.filter(c => c.userId !== challenge.userId);
         updateState("myChallengesState", [
             { key: "challenges", value: updatedChallenges },
             { key: "showChallenges", value: updatedChallenges.length > 0 }
@@ -65,13 +64,13 @@ const MyChallenges: FunctionComponent<{}> = () => {
                         <div key={i}>
                             <div>{`Challenger ID: ${challenge.userId}`}</div>
                             <Button
-                                onClick={() => handleAccept(challenge)}
+                                onClick={() => handelAcceptOrDecline(challenge, "accept")}
                                 color="primary"
                             >
                                 Accept
                             </Button>
                             <Button
-                                onClick={() => handleDecline(challenge)}
+                                onClick={() => handelAcceptOrDecline(challenge, "decline")}
                                 color="secondary"
                             >
                                 Decline
