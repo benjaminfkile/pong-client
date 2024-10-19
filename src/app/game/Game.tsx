@@ -7,12 +7,13 @@ import Paddle2 from "./game_components/paddles/Paddle2"
 import I_GameUpdatePayload from "../../interfaces/I_GameUpdatePayload"
 import getLocalUserId from "../utils/getLocalUserId"
 import "./Game.css"
+import Ball from "./game_components/ball/Ball"
 
 const Game: FunctionComponent<{}> = () => {
 
     const { updateState, manageSubscriptionAndStateUpdate } = stateService
     const [state, setState] = useState<I_GameState>(stateService.state.gameState)
-    const { player1Y, player2Y, width, height } = state
+    const { player1Y, player2Y, ballX, ballY, width, height, ballRadius } = state
     const PADDLE_HEIGHT = 50
     const localUserId = getLocalUserId()
 
@@ -23,10 +24,15 @@ const Game: FunctionComponent<{}> = () => {
         const unsubscribe = manageSubscriptionAndStateUpdate(setState, "gameState");
 
         socketService.on("game_update", (payload: I_GameUpdatePayload) => {
-            const {player1, player2, ball} = payload
+            //(payload)
+            const { player1, player2, ball } = payload
+
             updateState("gameState", [
-                { key: "player1Y", value: player1.y},
-                { key: "player2Y", value: player2.y}
+                { key: "player1Y", value: player1.y },
+                { key: "player2Y", value: player2.y },
+                { key: "ballX", value: ball.x },
+                { key: "ballY", value: ball.y },
+
             ])
         });
 
@@ -47,8 +53,7 @@ const Game: FunctionComponent<{}> = () => {
         }
     }
 
-    // console.log("player1Y",player1Y)
-    // console.log("player2Y",player2Y)
+    //(state)
 
 
     return (
@@ -63,6 +68,11 @@ const Game: FunctionComponent<{}> = () => {
             {getLocalUserId()}
             <Paddle1
                 y={player1Y}
+            />
+            <Ball
+                x={ballX}
+                y={ballY}
+                radius={ballRadius}
             />
             <Paddle2
                 y={player2Y}

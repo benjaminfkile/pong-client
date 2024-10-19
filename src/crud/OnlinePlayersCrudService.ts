@@ -14,7 +14,7 @@ const onlinePlayersCrudService = {
             const filteredOnlinePlayers = onlinePlayers.filter((player: I_OnlinePlayer) => player.user_id !== userId)
             updateState("onlinePlayersState", [{ key: "onlinePlayers", value: filteredOnlinePlayers }])
         } catch (error) {
-            //console.log(error)
+            ////(error)
         }
     }
 }

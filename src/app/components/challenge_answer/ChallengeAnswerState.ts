@@ -5,7 +5,10 @@ const challengeAnswerState: I_ChallengeAnswer = {
     accepted: 0,
     challenge: {
         challengerUserId: "none",
-        challengeRecipientUserId: "none"
+        challengeRecipientUserId: "none",
+        width: 800,
+        height: 500,
+        ballRadius: 25
     }
 }
 

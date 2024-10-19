@@ -27,7 +27,7 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
 
     }, [manageSubscriptionAndStateUpdate])
 
-    //console.log(state)
+    ////(state)
 
     return (
         <div className="OnlinePlayers">
@@ -41,10 +41,12 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
                     key={i}
                     className="OnlinePlayerListitem"
                     onClick={() => {
-                        const payload: I_Challenge = { 
+                        const payload: I_Challenge = {
                             challengerUserId: getLocalUserId(),
-                            challengeRecipientUserId: player.user_id
-                        
+                            challengeRecipientUserId: player.user_id,
+                            width: 800,
+                            height: 500,
+                            ballRadius: 12
                         }
                         socketService.emit('send_challenge', payload);
                     }}

@@ -13,7 +13,7 @@ const socketService = {
 
       return new Promise((resolve, reject) => {
         this.socket.on("connect", () => {
-          //console.log("Connected to server via socket:", this.socket.id)
+          ////("Connected to server via socket:", this.socket.id)
           const userId = getLocalUserId()
           const username = null//!!!!!!
           this.socket.emit("join_online", { userId: userId, username: username })
@@ -60,7 +60,7 @@ const socketService = {
   disconnect(): void {
     if (this.socket) {
       this.socket.disconnect()
-      //console.log("Disconnected from socket")
+      ////("Disconnected from socket")
       this.socket = null
     } else {
       console.error("Socket not initialized. Cannot disconnect.")

@@ -39,7 +39,10 @@ const MyChallenges: FunctionComponent<{}> = () => {
 
         const payload: I_Challenge = {
             challengerUserId: challenge.challengerUserId,
-            challengeRecipientUserId: getLocalUserId()
+            challengeRecipientUserId: getLocalUserId(),
+            width: challenge.width,
+            height: challenge.height,
+            ballRadius: challenge.ballRadius
         }
 
         socketService.emit(`${prefix}_challenge`, payload);

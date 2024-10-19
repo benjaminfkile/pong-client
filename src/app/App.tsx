@@ -6,7 +6,6 @@ import OnlinePlayers from "./components/online_players/OnlinePlayers"
 import MyChallenges from "./components/my_challenges/MyChallenges"
 import ChallengeAnswer from "./components/challenge_answer/ChallengeAnswer"
 import Game from "./game/Game"
-import I_GameStartedPayload from "../interfaces/I_GameStartedPayload"
 import gameService from "./services/GameService"
 
 
@@ -37,7 +36,7 @@ const App: FunctionComponent<{}> = () => {
 
   }, [manageSubscriptionAndStateUpdate])
 
-  //console.log(state)
+  ////(state)
 
   return (
     <div className="App">

@@ -9,8 +9,6 @@ const Paddle1: FunctionComponent<Props> = (props) => {
 
     const { y } = props
 
-    console.log("Paddle1 y", y)
-
     return (
         <div
             id="paddle-1"

@@ -18,7 +18,7 @@ const ChallengeAnswer: FunctionComponent<{}> = () => {
 
         socketService.on('challenge_accepted', (payload: I_Challenge) => {
 
-            console.log(`${payload.challengeRecipientUserId} accepted your challenge`);
+            // //(`${payload.challengeRecipientUserId} accepted your challenge`);
 
             updateState("challengeAnswerState", [
                 { key: "accepted", value: 1 },
@@ -28,7 +28,7 @@ const ChallengeAnswer: FunctionComponent<{}> = () => {
         });
 
         socketService.on('challenge_declined', (payload: I_Challenge) => {
-            console.log(`${payload.challengeRecipientUserId} declined your challenge`);
+            //(`${payload.challengeRecipientUserId} declined your challenge`);
 
             updateState("challengeAnswerState", [
                 { key: "accepted", value: -1 },
@@ -61,14 +61,7 @@ const ChallengeAnswer: FunctionComponent<{}> = () => {
                     </Button>
                     <Button
                         onClick={() => {
-                            //challenge already = payload, just trying to be consistent
-                            const { challengerUserId, challengeRecipientUserId } = challenge
-                            const payload = {
-                                challengerUserId: challengerUserId,
-                                challengeRecipientUserId: challengeRecipientUserId
-                            }
-
-                            socketService.emit('start_game', payload);
+                            socketService.emit('start_game', challenge);
                         }}
                         color="primary"
                     >
