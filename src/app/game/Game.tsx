@@ -13,9 +13,12 @@ const Game: FunctionComponent<{}> = () => {
 
     const { updateState, manageSubscriptionAndStateUpdate } = stateService
     const [state, setState] = useState<I_GameState>(stateService.state.gameState)
-    const { player1Y, player2Y, ballX, ballY, width, height, ballRadius } = state
-    const PADDLE_HEIGHT = 50
+    const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballRadius } = state
+    const [localPaddleY, setLocalPaddleY] = useState<number>(challenger ? player1Y : player2Y)
+    const PADDLE_HEIGHT = 100
     const localUserId = getLocalUserId()
+
+    let y2Emmit = 0
 
     useEffect(() => {
         const gameElement = document.getElementById('game');
@@ -28,17 +31,23 @@ const Game: FunctionComponent<{}> = () => {
             const { player1, player2, ball } = payload
 
             updateState("gameState", [
-                { key: "player1Y", value: player1.y },
-                { key: "player2Y", value: player2.y },
+                { key: "player1Y", value: challenger ? localPaddleY : player1.y },
+                { key: "player2Y", value: !challenger ? localPaddleY : player2.y },
                 { key: "ballX", value: ball.x },
                 { key: "ballY", value: ball.y },
 
             ])
         });
 
+        // Use 16.67ms interval for 60 FPS
+        const intervalId = setInterval(() => {
+            socketService.emit("update_paddle", { y: y2Emmit, id: localUserId });
+        }, 1000 / 60); // This is approximately 16.67ms for 60 FPS
+
         return () => {
             unsubscribe();
             gameElement?.removeEventListener('mousemove', handleMouseMove);
+            clearInterval(intervalId); // Clear interval on unmount
         };
 
     }, [manageSubscriptionAndStateUpdate, updateState]);
@@ -49,11 +58,10 @@ const Game: FunctionComponent<{}> = () => {
         if (gameRect) {
             let newY = event.clientY - gameRect.top - (PADDLE_HEIGHT / 2);
             newY = Math.max(0, Math.min(newY, gameRect.height - PADDLE_HEIGHT));
-            socketService.emit("update_paddle", { y: newY, id: localUserId });
+            setLocalPaddleY(newY)
+            y2Emmit = newY
         }
     }
-
-    //(state)
 
 
     return (
@@ -67,7 +75,7 @@ const Game: FunctionComponent<{}> = () => {
         >
             {getLocalUserId()}
             <Paddle1
-                y={player1Y}
+                y={challenger ? localPaddleY : player1Y}
             />
             <Ball
                 x={ballX}
@@ -75,7 +83,7 @@ const Game: FunctionComponent<{}> = () => {
                 radius={ballRadius}
             />
             <Paddle2
-                y={player2Y}
+                y={!challenger ? localPaddleY : player2Y}
                 gameWidth={width}
             />
         </div>
