@@ -5,19 +5,22 @@ import I_App from "../interfaces/I_App"
 import OnlinePlayers from "./components/online_players/OnlinePlayers"
 import MyChallenges from "./components/my_challenges/MyChallenges"
 import ChallengeAnswer from "./components/challenge_answer/ChallengeAnswer"
+import Game from "./game/Game"
+import I_GameStartedPayload from "../interfaces/I_GameStartedPayload"
+import gameService from "./services/GameService"
 
 
 const App: FunctionComponent<{}> = () => {
   const { manageSubscriptionAndStateUpdate } = stateService
   const [state, setState] = useState<I_App>(stateService.state.appState)
-  const { socketId } = state
+  const { socketId, inGame } = state
 
   useEffect(() => {
-    const url = process.env.REACT_APP_API_URL || ""
 
     const initializeSocketConnection = async () => {
       try {
-        await socketService.initiateWebSocketConnection(url)
+        await socketService.initiateWebSocketConnection(`${process.env.REACT_APP_API_URL}`)
+        gameService.listenForGameUpdates()
       } catch (error) {
         console.error('Error connecting to socket:', error)
       }
@@ -40,9 +43,12 @@ const App: FunctionComponent<{}> = () => {
     <div className="App">
       {socketId &&
         <>
-          <OnlinePlayers />
-          <MyChallenges />
-          <ChallengeAnswer/>
+          {!inGame && <>
+            <OnlinePlayers />
+            <MyChallenges />
+            <ChallengeAnswer />
+          </>}
+          {inGame && <Game />}
         </>
       }
     </div>

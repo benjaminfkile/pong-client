@@ -3,10 +3,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/
 import stateService from "../../../stateManagement/StateService"
 import socketService from "../../socket_io/SocketService"
 import I_MyChallenges from "../../../interfaces/I_MyChallenges"
-import I_Challenge from "../../../interfaces/I_Challenge"
 import getLocalUserId from "../../utils/getLocalUserId"
-import I_SendChallengePayload from "../../../interfaces/I_SendChallengePayload"
-import I_AcceptOrDeclinePayload from "../../../interfaces/I_AcceptOrDeclinePayload"
+import I_Challenge from "../../../interfaces/I_Challenge"
 import "./MyChallenges.css"
 
 const MyChallenges: FunctionComponent<{}> = () => {
@@ -19,12 +17,11 @@ const MyChallenges: FunctionComponent<{}> = () => {
 
         const unsubscribe = manageSubscriptionAndStateUpdate(setState, "myChallengesState")
 
-        socketService.on('receive_challenge', (payload: I_SendChallengePayload) => {
-            console.log("receive_challenge", payload)
-            const { message } = payload
+        socketService.on('receive_challenge', (payload: I_Challenge) => {
+            const { challengerUserId, challengeRecipientUserId } = payload
             let updatedChallenges = [...challenges]
 
-            updatedChallenges.unshift({ userId: message })
+            updatedChallenges.unshift(payload)
 
             updateState("myChallengesState", [
                 { key: "showChallenges", value: true },
@@ -40,19 +37,25 @@ const MyChallenges: FunctionComponent<{}> = () => {
 
     const handelAcceptOrDecline = (challenge: I_Challenge, prefix: "accept" | "decline") => {
 
-        const payload: I_AcceptOrDeclinePayload = {
-            challengerUserId: challenge.userId,
+        const payload: I_Challenge = {
+            challengerUserId: challenge.challengerUserId,
             challengeRecipientUserId: getLocalUserId()
         }
 
         socketService.emit(`${prefix}_challenge`, payload);
 
-        const updatedChallenges = challenges.filter(c => c.userId !== challenge.userId);
+        const updatedChallenges = challenges.filter(c => c.challengerUserId !== challenge.challengerUserId);
 
         updateState("myChallengesState", [
             { key: "challenges", value: updatedChallenges },
-            { key: "showChallenges", value: updatedChallenges.length > 0 }
+            { key: "showChallenges", value: updatedChallenges.length > 0 },
         ]);
+
+        // if (prefix === "accept") {
+        //     updateState("appState", [
+        //         { key: "inGame", value: true}
+        //     ])
+        // }
     };
 
     return (
@@ -62,7 +65,7 @@ const MyChallenges: FunctionComponent<{}> = () => {
                 <DialogContent>
                     {challenges.map((challenge: I_Challenge, i) =>
                         <div key={i}>
-                            <div>{`Challenger ID: ${challenge.userId}`}</div>
+                            <div>{`Challenger ID: ${challenge.challengerUserId}`}</div>
                             <Button
                                 onClick={() => handelAcceptOrDecline(challenge, "accept")}
                                 color="primary"

@@ -2,27 +2,38 @@ import { FunctionComponent, useEffect, useState } from "react"
 import I_ChallengeAnswer from "../../../interfaces/I_ChallengeAnswer"
 import stateService from "../../../stateManagement/StateService"
 import socketService from "../../socket_io/SocketService"
+import { Dialog, DialogTitle, DialogContent, Button, DialogActions } from "@mui/material"
+import I_Challenge from "../../../interfaces/I_Challenge"
 
-interface ChallengeAnswerProps {
 
-}
-
-const ChallengeAnswer: FunctionComponent<ChallengeAnswerProps> = () => {
+const ChallengeAnswer: FunctionComponent<{}> = () => {
 
     const { updateState, manageSubscriptionAndStateUpdate } = stateService
     const [state, setState] = useState<I_ChallengeAnswer>(stateService.state.challengeAnswerState)
+    const { accepted, challenge } = state
 
     useEffect(() => {
 
-        const unsubscribe = manageSubscriptionAndStateUpdate(setState, "myChallengesState")
+        const unsubscribe = manageSubscriptionAndStateUpdate(setState, "challengeAnswerState")
 
-        socketService.on('challenge_accepted', (challengedId) => {
-            console.log(`Your challenge was accepted ${challengedId}`);
+        socketService.on('challenge_accepted', (payload: I_Challenge) => {
+
+            console.log(`${payload.challengeRecipientUserId} accepted your challenge`);
+
+            updateState("challengeAnswerState", [
+                { key: "accepted", value: 1 },
+                { key: "challenge", value: payload }
+            ])
+
         });
 
-        // Listen for challenge declined
-        socketService.on('challenge_declined', (challengedId) => {
-            console.log(`Your challenge was declined ${challengedId}`);
+        socketService.on('challenge_declined', (payload: I_Challenge) => {
+            console.log(`${payload.challengeRecipientUserId} declined your challenge`);
+
+            updateState("challengeAnswerState", [
+                { key: "accepted", value: -1 },
+                { key: "challenge", value: payload }
+            ])
         });
 
         return () => {
@@ -33,7 +44,38 @@ const ChallengeAnswer: FunctionComponent<ChallengeAnswerProps> = () => {
 
     return (
         <div className="ChallengeAnswer">
+            <Dialog open={accepted !== 0}>
+                <DialogTitle>{`${challenge.challengeRecipientUserId} ${accepted > 0 ? "accepted" : "declined"} your challenge`}</DialogTitle>
+                <DialogContent>
 
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => updateState("challengeAnswerState", [
+                            { key: "accepted", value: 0 },
+                            { key: "challenge", value: { challengerUserId: "none", challengeRecipientUserId: "none" } }
+                        ])}
+                        color="primary"
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            //challenge already = payload, just trying to be consistent
+                            const { challengerUserId, challengeRecipientUserId } = challenge
+                            const payload = {
+                                challengerUserId: challengerUserId,
+                                challengeRecipientUserId: challengeRecipientUserId
+                            }
+
+                            socketService.emit('start_game', payload);
+                        }}
+                        color="primary"
+                    >
+                        Start Game
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

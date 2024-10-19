@@ -5,7 +5,7 @@ import onlinePlayersCrudService from "../../../crud/OnlinePlayersCrudService"
 import I_OnlinePlayers from "../../../interfaces/I_OnlinePlayersState"
 import getLocalUserId from "../../utils/getLocalUserId"
 import "./OnlinePlayers.css"
-import I_SendChallengePayload from "../../../interfaces/I_SendChallengePayload"
+import I_Challenge from "../../../interfaces/I_Challenge"
 
 const OnlinePlayers: FunctionComponent<{}> = () => {
 
@@ -41,9 +41,11 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
                     key={i}
                     className="OnlinePlayerListitem"
                     onClick={() => {
-                        const challengeRecipientUserId = player.user_id
-                        const message = getLocalUserId()
-                        const payload: I_SendChallengePayload = { challengeRecipientUserId, message }
+                        const payload: I_Challenge = { 
+                            challengerUserId: getLocalUserId(),
+                            challengeRecipientUserId: player.user_id
+                        
+                        }
                         socketService.emit('send_challenge', payload);
                     }}
                 >

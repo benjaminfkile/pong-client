@@ -1,5 +1,5 @@
 interface I_Challenge {
-    userId: string
+    challengerUserId: string
+    challengeRecipientUserId: string
 }
-
 export default I_Challenge
