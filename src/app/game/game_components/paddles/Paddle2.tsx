@@ -19,7 +19,7 @@ const Paddle2: FunctionComponent<Props> = (props) => {
                 top: `${y}px`
             }}
         >
-
+            2
         </div>
     )
 }

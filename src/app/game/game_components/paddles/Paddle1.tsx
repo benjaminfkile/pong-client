@@ -17,7 +17,7 @@ const Paddle1: FunctionComponent<Props> = (props) => {
                 top: `${y}px`
             }}
         >
-
+            1
         </div>
     )
 }

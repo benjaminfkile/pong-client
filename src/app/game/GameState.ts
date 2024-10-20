@@ -8,7 +8,8 @@ const gameState: I_GameState = {
     ballY: 0,
     width: 800,
     height: 500,
-    ballRadius: 25
+    ballRadius: 25,
+    swapSides: false
 }
 
 export default gameState

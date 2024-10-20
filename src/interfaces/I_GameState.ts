@@ -7,6 +7,7 @@ interface I_GameState {
     width: number
     height: number
     ballRadius: number
+    swapSides: boolean
 }
 
 export default I_GameState

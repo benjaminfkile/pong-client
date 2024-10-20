@@ -39,15 +39,24 @@ const App: FunctionComponent<{}> = () => {
   ////(state)
 
   return (
-    <div className="App">
+    <div 
+    className="App"
+    id="app"
+    >
       {socketId &&
         <>
-          {!inGame && <>
-            <OnlinePlayers />
-            <MyChallenges />
-            <ChallengeAnswer />
-          </>}
-          {inGame && <Game />}
+          {!inGame &&
+            <>
+              <OnlinePlayers />
+              <MyChallenges />
+              <ChallengeAnswer />
+            </>
+          }
+          {inGame &&
+            <>
+              <Game />
+            </>
+          }
         </>
       }
     </div>
