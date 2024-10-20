@@ -42,7 +42,7 @@ const Game: FunctionComponent<{}> = () => {
         // Use 16.67ms interval for 60 FPS
         const intervalId = setInterval(() => {
             socketService.emit("update_paddle", { y: y2Emmit, id: localUserId });
-        }, 1000 / 60); // This is approximately 16.67ms for 60 FPS
+        }, 1000 / 240);
 
         return () => {
             unsubscribe();
@@ -63,7 +63,7 @@ const Game: FunctionComponent<{}> = () => {
         }
     }
 
-
+ 
     return (
         <div
             id="game"
