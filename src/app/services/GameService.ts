@@ -10,15 +10,14 @@ const gameService = {
 
             const { player, width, height, ballSize } = payload
 
-            console.log(payload)
-
             updateState("gameState", [
                 { key: "challenger", value: player === 1 },
                 { key: "width", value: width },
                 { key: "height", value: height },
                 { key: "ballSize", value: ballSize },
                 { key: "paddleWidth", value: payload.paddleWidth },
-                { key: "paddleHeight", value: payload.paddleHeight }
+                { key: "paddleHeight", value: payload.paddleHeight },
+                { key: "pointsToWin", value: payload.pointsToWin }
             ])
 
             updateState("appState", [

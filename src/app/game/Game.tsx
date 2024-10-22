@@ -8,11 +8,13 @@ import I_GameUpdatePayload from "../../interfaces/I_GameUpdatePayload"
 import getLocalUserId from "../utils/getLocalUserId"
 import Ball from "./game_components/ball/Ball"
 import "./Game.css"
+import I_ScorePayload from "../../interfaces/I_ScorePayload"
+import I_GameOverPayload from "../../interfaces/I_GameOverPayload"
 
 const Game: FunctionComponent<{}> = () => {
     const { updateState, manageSubscriptionAndStateUpdate } = stateService;
     const [state, setState] = useState<I_GameState>(stateService.state.gameState);
-    const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballSize, paddleHeight, paddleWidth } = state;
+    const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballSize, paddleHeight, paddleWidth, score, winner } = state;
     const [localPaddleY, setLocalPaddleY] = useState<number>(challenger ? player1Y : player2Y);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
@@ -35,6 +37,23 @@ const Game: FunctionComponent<{}> = () => {
                 { key: "ballY", value: ball.y }
             ]);
         });
+
+        socketService.on("game_over", (payload: I_GameOverPayload) => {
+            console.log("game_over", payload)
+            updateState("gameState", [
+                { key: "score", value: payload.score },
+                { key: "winner", value: payload.winner }
+            ]);
+        })
+
+        socketService.on("score_update", (payload: I_ScorePayload) => {
+            if (!winner) {
+                console.log("score_update", payload)
+                updateState("gameState", [
+                    { key: "score", value: payload }
+                ]);
+            }
+        })
 
         const intervalId = setInterval(() => {
             socketService.emit("update_paddle", { y: y2Emmit, id: localUserId });
@@ -65,7 +84,15 @@ const Game: FunctionComponent<{}> = () => {
 
     return (
         <div id="game" className="Game">
-            <div
+            <div className="GameScore">
+                <div className="GameScoreItem">
+                    {`p1: ${score.player1.score}`}
+                </div>
+                <div className="GameScoreItem">
+                    {`p2: ${score.player2.score}`}
+                </div>
+            </div>
+            {!winner && <div
                 className="GameContent"
                 id="game-content"
                 style={{
@@ -77,7 +104,7 @@ const Game: FunctionComponent<{}> = () => {
                 <Paddle1 y={challenger ? localPaddleY : player1Y} width={paddleWidth} height={paddleHeight} />
                 <Ball x={ballX} y={ballY} size={ballSize} />
                 <Paddle2 y={!challenger ? localPaddleY : player2Y} width={paddleWidth} height={paddleHeight} gameWidth={width} />
-            </div>
+            </div>}
             <button onClick={() => setIsFlipped(!isFlipped)}>
                 Flip View
             </button>

@@ -4,8 +4,9 @@ interface I_GameStartedPayload{
     width: number
     height: number
     ballSize: number
-    paddleWidth: number
     paddleHeight: number
+    paddleWidth: number
+    pointsToWin: number
     maxVelocity: number
     velocityIncreaseFactor: number
 }

@@ -5,13 +5,14 @@ const challengeAnswerState: I_ChallengeAnswer = {
     challenge: {
         challengerUserId: "none",
         challengeRecipientUserId: "none",
-        width: 800,
-        height: 500,
-        ballSize: 25,
-        paddleHeight: 100,
-        paddleWidth: 10,
-        maxVelocity: 10,
-        velocityIncreaseFactor: 5
+        width: 0,
+        height: 0,
+        ballSize: 0,
+        paddleHeight: 0,
+        paddleWidth: 0,
+        pointsToWin: 0,
+        maxVelocity: 0,
+        velocityIncreaseFactor: 0
     }
 }
 

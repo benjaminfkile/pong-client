@@ -36,6 +36,8 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
 
             <br></br>
 
+
+
             {onlinePlayers.map((player, i) =>
                 <div
                     key={i}
@@ -49,6 +51,7 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
                             ballSize: 15,
                             paddleHeight: 120,
                             paddleWidth: 15,
+                            pointsToWin: 2,
                             maxVelocity: 20,
                             velocityIncreaseFactor: 1.40
                         }

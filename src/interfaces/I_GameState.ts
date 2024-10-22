@@ -1,3 +1,5 @@
+import I_Score from "./I_Score"
+
 interface I_GameState {
     challenger: boolean
     player1Y: number
@@ -12,6 +14,11 @@ interface I_GameState {
     maxVelocity: number
     velocityIncreaseFactor: number
     swapSides: boolean
+    score: {
+        player1: I_Score,
+        player2: I_Score
+    }
+    winner: string | null
 }
 
 export default I_GameState

@@ -6,6 +6,7 @@ interface I_Challenge {
     ballSize: number
     paddleHeight: number
     paddleWidth: number
+    pointsToWin: number
     maxVelocity: number
     velocityIncreaseFactor: number
 }

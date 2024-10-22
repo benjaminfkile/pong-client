@@ -45,6 +45,7 @@ const MyChallenges: FunctionComponent<{}> = () => {
             ballSize: challenge.ballSize,
             paddleHeight: challenge.paddleHeight,
             paddleWidth: challenge.paddleWidth,
+            pointsToWin: challenge.pointsToWin,
             maxVelocity: challenge.maxVelocity,
             velocityIncreaseFactor: challenge.velocityIncreaseFactor        
         }

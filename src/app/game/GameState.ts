@@ -6,14 +6,19 @@ const gameState: I_GameState = {
     player2Y: 0,
     ballX: 0,
     ballY: 0,
-    width: 800,
-    height: 500,
-    ballSize: 25,
-    paddleWidth: 10,
-    paddleHeight: 100,
-    maxVelocity: 10,
-    velocityIncreaseFactor: 5,
-    swapSides: false
+    width: 0,
+    height: 0,
+    ballSize: 0,
+    paddleWidth: 0,
+    paddleHeight: 0,
+    maxVelocity: 0,
+    velocityIncreaseFactor: 0,
+    swapSides: false,
+    score: {
+        player1: { userName: "", userId: "", score: 0 },
+        player2: { userName: "", userId: "", score: 0 }
+    },
+    winner: null
 }
 
 export default gameState
