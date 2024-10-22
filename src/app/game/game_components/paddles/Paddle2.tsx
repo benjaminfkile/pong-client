@@ -3,19 +3,23 @@ import "./Paddle.css"
 
 interface Props {
     y: number
+    width: number
+    height: number
     gameWidth: number
 }
 
 const Paddle2: FunctionComponent<Props> = (props) => {
 
-    const { y, gameWidth } = props
+    const { y, width, height, gameWidth } = props
 
     return (
         <div
             id="paddle-2"
             className="Paddle"
             style={{
-                left: `${gameWidth - 25}px`,
+                width: `${width}px`,
+                height: `${height}px`,
+                left: `${gameWidth - width}px`,
                 top: `${y}px`
             }}
         >

@@ -8,7 +8,11 @@ const gameState: I_GameState = {
     ballY: 0,
     width: 800,
     height: 500,
-    ballRadius: 25,
+    ballSize: 25,
+    paddleWidth: 10,
+    paddleHeight: 100,
+    maxVelocity: 10,
+    velocityIncreaseFactor: 5,
     swapSides: false
 }
 

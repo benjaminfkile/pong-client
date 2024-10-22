@@ -3,7 +3,11 @@ interface I_GameStartedPayload{
     player: number,
     width: number
     height: number
-    ballRadius: number
+    ballSize: number
+    paddleWidth: number
+    paddleHeight: number
+    maxVelocity: number
+    velocityIncreaseFactor: number
 }
 
 export default I_GameStartedPayload

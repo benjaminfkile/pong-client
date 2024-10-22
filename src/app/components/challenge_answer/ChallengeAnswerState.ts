@@ -1,5 +1,4 @@
 import I_ChallengeAnswer from "../../../interfaces/I_ChallengeAnswer"
-import { v4 as uuidv4 } from "uuid"
 
 const challengeAnswerState: I_ChallengeAnswer = {
     accepted: 0,
@@ -8,7 +7,11 @@ const challengeAnswerState: I_ChallengeAnswer = {
         challengeRecipientUserId: "none",
         width: 800,
         height: 500,
-        ballRadius: 25
+        ballSize: 25,
+        paddleHeight: 100,
+        paddleWidth: 10,
+        maxVelocity: 10,
+        velocityIncreaseFactor: 5
     }
 }
 

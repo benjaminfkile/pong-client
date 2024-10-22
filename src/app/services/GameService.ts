@@ -8,7 +8,7 @@ const gameService = {
     listenForGameUpdates: () => {
         socketService.on('game_started', (payload: I_GameStartedPayload) => {
 
-            const { player, width, height, ballRadius } = payload
+            const { player, width, height, ballSize } = payload
 
             console.log(payload)
 
@@ -16,7 +16,9 @@ const gameService = {
                 { key: "challenger", value: player === 1 },
                 { key: "width", value: width },
                 { key: "height", value: height },
-                { key: "ballRadius", value: ballRadius }
+                { key: "ballSize", value: ballSize },
+                { key: "paddleWidth", value: payload.paddleWidth },
+                { key: "paddleHeight", value: payload.paddleHeight }
             ])
 
             updateState("appState", [

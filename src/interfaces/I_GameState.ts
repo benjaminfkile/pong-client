@@ -6,7 +6,11 @@ interface I_GameState {
     ballY: number
     width: number
     height: number
-    ballRadius: number
+    ballSize: number
+    paddleHeight: number
+    paddleWidth: number
+    maxVelocity: number
+    velocityIncreaseFactor: number
     swapSides: boolean
 }
 

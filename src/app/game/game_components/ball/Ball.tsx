@@ -4,22 +4,20 @@ import "./Ball.css"
 interface Props {
     x: number
     y: number
-    radius: number
+    size: number
 }
 
 const Ball: FunctionComponent<Props> = (props) => {
 
-    const { x, y, radius } = props
-    const size = radius * 2
-    //(x,y)
+    const { x, y, size } = props
 
     return (
 
         <div
             className="Ball"
             style={{
-                left: `${x - radius}px`,
-                top: `${y - radius}px`,
+                left: `${x - size / 2}px`,
+                top: `${y - size / 2}px`,
                 width: `${size}px`,
                 height: `${size}px`
             }}

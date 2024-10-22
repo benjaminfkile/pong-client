@@ -6,17 +6,16 @@ import Paddle1 from "./game_components/paddles/Paddle1"
 import Paddle2 from "./game_components/paddles/Paddle2"
 import I_GameUpdatePayload from "../../interfaces/I_GameUpdatePayload"
 import getLocalUserId from "../utils/getLocalUserId"
-import "./Game.css"
 import Ball from "./game_components/ball/Ball"
+import "./Game.css"
 
 const Game: FunctionComponent<{}> = () => {
     const { updateState, manageSubscriptionAndStateUpdate } = stateService;
     const [state, setState] = useState<I_GameState>(stateService.state.gameState);
-    const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballRadius } = state;
+    const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballSize, paddleHeight, paddleWidth } = state;
     const [localPaddleY, setLocalPaddleY] = useState<number>(challenger ? player1Y : player2Y);
-    const [isFlipped, setIsFlipped] = useState<boolean>(false); // Track the player's view side
+    const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
-    const PADDLE_HEIGHT = 100;
     const localUserId = getLocalUserId();
 
     let y2Emmit = 0;
@@ -51,14 +50,14 @@ const Game: FunctionComponent<{}> = () => {
     const handleMouseMove = (event: MouseEvent) => {
         const gameRect = document.getElementById('game-content')?.getBoundingClientRect();
         if (gameRect) {
-            let newY = event.clientY - gameRect.top - (PADDLE_HEIGHT / 2);
+            let newY = event.clientY - gameRect.top - (paddleHeight / 2);
 
             // Adjust Y position based on player's view side
             if (isFlipped) {
-                newY = gameRect.height - newY - PADDLE_HEIGHT;
+                newY = gameRect.height - newY - paddleHeight;
             }
 
-            newY = Math.max(0, Math.min(newY, gameRect.height - PADDLE_HEIGHT));
+            newY = Math.max(0, Math.min(newY, gameRect.height - paddleHeight));
             setLocalPaddleY(newY);
             y2Emmit = newY;
         }
@@ -75,9 +74,9 @@ const Game: FunctionComponent<{}> = () => {
                     transform: `rotateY(${isFlipped ? 180 : 0}deg)`
                 }}
             >
-                <Paddle1 y={challenger ? localPaddleY : player1Y} />
-                <Ball x={ballX} y={ballY} radius={ballRadius} />
-                <Paddle2 y={!challenger ? localPaddleY : player2Y} gameWidth={width} />
+                <Paddle1 y={challenger ? localPaddleY : player1Y} width={paddleWidth} height={paddleHeight} />
+                <Ball x={ballX} y={ballY} size={ballSize} />
+                <Paddle2 y={!challenger ? localPaddleY : player2Y} width={paddleWidth} height={paddleHeight} gameWidth={width} />
             </div>
             <button onClick={() => setIsFlipped(!isFlipped)}>
                 Flip View

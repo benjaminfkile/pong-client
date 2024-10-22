@@ -4,8 +4,8 @@ import socketService from "../../socket_io/SocketService"
 import onlinePlayersCrudService from "../../../crud/OnlinePlayersCrudService"
 import I_OnlinePlayers from "../../../interfaces/I_OnlinePlayersState"
 import getLocalUserId from "../../utils/getLocalUserId"
-import "./OnlinePlayers.css"
 import I_Challenge from "../../../interfaces/I_Challenge"
+import "./OnlinePlayers.css"
 
 const OnlinePlayers: FunctionComponent<{}> = () => {
 
@@ -46,7 +46,11 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
                             challengeRecipientUserId: player.user_id,
                             width: 800,
                             height: 500,
-                            ballRadius: 12
+                            ballSize: 15,
+                            paddleHeight: 120,
+                            paddleWidth: 15,
+                            maxVelocity: 20,
+                            velocityIncreaseFactor: 1.40
                         }
                         socketService.emit('send_challenge', payload);
                     }}
