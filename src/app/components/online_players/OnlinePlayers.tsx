@@ -27,8 +27,6 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
 
     }, [manageSubscriptionAndStateUpdate])
 
-    ////(state)
-
     return (
         <div className="OnlinePlayers">
 
@@ -51,7 +49,7 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
                             ballSize: 15,
                             paddleHeight: 120,
                             paddleWidth: 15,
-                            pointsToWin: 2,
+                            pointsToWin: 20,
                             maxVelocity: 20,
                             velocityIncreaseFactor: 1.40
                         }

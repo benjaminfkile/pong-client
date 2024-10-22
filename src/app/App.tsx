@@ -6,7 +6,7 @@ import OnlinePlayers from "./components/online_players/OnlinePlayers"
 import MyChallenges from "./components/my_challenges/MyChallenges"
 import ChallengeAnswer from "./components/challenge_answer/ChallengeAnswer"
 import Game from "./game/Game"
-import gameService from "./services/GameService"
+import listenForGameStart from "./utils/listenForGameStart"
 
 
 const App: FunctionComponent<{}> = () => {
@@ -19,7 +19,7 @@ const App: FunctionComponent<{}> = () => {
     const initializeSocketConnection = async () => {
       try {
         await socketService.initiateWebSocketConnection(`${process.env.REACT_APP_API_URL}`)
-        gameService.listenForGameUpdates()
+        listenForGameStart()
       } catch (error) {
         console.error('Error connecting to socket:', error)
       }

@@ -7,9 +7,10 @@ import Paddle2 from "./game_components/paddles/Paddle2"
 import I_GameUpdatePayload from "../../interfaces/I_GameUpdatePayload"
 import getLocalUserId from "../utils/getLocalUserId"
 import Ball from "./game_components/ball/Ball"
-import "./Game.css"
 import I_ScorePayload from "../../interfaces/I_ScorePayload"
 import I_GameOverPayload from "../../interfaces/I_GameOverPayload"
+import GameResult from "./game_components/game_result/GameResult"
+import "./Game.css"
 
 const Game: FunctionComponent<{}> = () => {
     const { updateState, manageSubscriptionAndStateUpdate } = stateService;
@@ -17,8 +18,7 @@ const Game: FunctionComponent<{}> = () => {
     const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballSize, paddleHeight, paddleWidth, score, winner } = state;
     const [localPaddleY, setLocalPaddleY] = useState<number>(challenger ? player1Y : player2Y);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
-
-    const localUserId = getLocalUserId();
+    const localUserId = getLocalUserId()
 
     let y2Emmit = 0;
 
@@ -83,31 +83,49 @@ const Game: FunctionComponent<{}> = () => {
     };
 
     return (
-        <div id="game" className="Game">
-            <div className="GameScore">
-                <div className="GameScoreItem">
+        <div
+            id="game"
+            className="Game"
+            style={{
+                top: `calc(50% - ${(height / 2) + 30}px)`,
+                left: `calc(50% - ${(width / 2) + 30}px)`,
+                width: `${width + 60}px`,
+                height: `${height + 60}px`
+
+            }}
+        >
+            {/* <div className="GameHeader">
+                <div className="GameHeaderItem">
                     {`p1: ${score.player1.score}`}
                 </div>
-                <div className="GameScoreItem">
+                <div className="GameHeaderItem">
                     {`p2: ${score.player2.score}`}
                 </div>
-            </div>
-            {!winner && <div
+            </div> */}
+            <div
                 className="GameContent"
                 id="game-content"
                 style={{
                     width: `${width}px`,
                     height: `${height}px`,
+                    // top: `calc(50% - ${(height / 2) + 30}px)`,
+                    // left: `calc(50% - ${(width / 2) + 30}px)`,
                     transform: `rotateY(${isFlipped ? 180 : 0}deg)`
                 }}
             >
                 <Paddle1 y={challenger ? localPaddleY : player1Y} width={paddleWidth} height={paddleHeight} />
                 <Ball x={ballX} y={ballY} size={ballSize} />
                 <Paddle2 y={!challenger ? localPaddleY : player2Y} width={paddleWidth} height={paddleHeight} gameWidth={width} />
-            </div>}
+            </div>
             <button onClick={() => setIsFlipped(!isFlipped)}>
                 Flip View
             </button>
+            {winner &&
+                <GameResult
+                    winner={winner === localUserId}
+                    score={score}
+                />
+            }
         </div>
     );
 };

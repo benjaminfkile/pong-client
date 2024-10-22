@@ -14,15 +14,11 @@ const MyChallenges: FunctionComponent<{}> = () => {
     const { challenges, showChallenges } = state
 
     useEffect(() => {
-
         const unsubscribe = manageSubscriptionAndStateUpdate(setState, "myChallengesState")
 
         socketService.on('receive_challenge', (payload: I_Challenge) => {
-            const { challengerUserId, challengeRecipientUserId } = payload
-            let updatedChallenges = [...challenges]
-
-            updatedChallenges.unshift(payload)
-
+            const currentState = stateService.state.myChallengesState
+            const updatedChallenges = [payload, ...(currentState.challenges || [])]
             updateState("myChallengesState", [
                 { key: "showChallenges", value: true },
                 { key: "challenges", value: updatedChallenges }
@@ -34,6 +30,8 @@ const MyChallenges: FunctionComponent<{}> = () => {
         }
 
     }, [manageSubscriptionAndStateUpdate])
+
+
 
     const handelAcceptOrDecline = (challenge: I_Challenge, prefix: "accept" | "decline") => {
 
@@ -47,7 +45,7 @@ const MyChallenges: FunctionComponent<{}> = () => {
             paddleWidth: challenge.paddleWidth,
             pointsToWin: challenge.pointsToWin,
             maxVelocity: challenge.maxVelocity,
-            velocityIncreaseFactor: challenge.velocityIncreaseFactor        
+            velocityIncreaseFactor: challenge.velocityIncreaseFactor
         }
 
         socketService.emit(`${prefix}_challenge`, payload);
@@ -59,11 +57,6 @@ const MyChallenges: FunctionComponent<{}> = () => {
             { key: "showChallenges", value: updatedChallenges.length > 0 },
         ]);
 
-        // if (prefix === "accept") {
-        //     updateState("appState", [
-        //         { key: "inGame", value: true}
-        //     ])
-        // }
     };
 
     return (

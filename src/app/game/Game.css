@@ -1,5 +1,11 @@
-.GameContent{
+.Game{
     position: absolute;
-    top: 50px;
     outline: 1px solid #000000;
+}
+
+.GameContent{
+    /* position: absolute; */
+    outline: 1px solid #000000;
+    margin-left: 30px;
+    margin-top: 30px;
 }
