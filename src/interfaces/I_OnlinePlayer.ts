@@ -1,6 +1,7 @@
 interface I_OnlinePlayer {
     id: number;                     
-    user_id: string          
+    user_id: string
+    user_name: string          
     socket_id: string;               
     last_active: Date;               
     created_at: Date;                

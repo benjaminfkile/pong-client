@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/
 import stateService from "../../../stateManagement/StateService"
 import socketService from "../../socket_io/SocketService"
 import I_MyChallenges from "../../../interfaces/I_MyChallenges"
-import getLocalUserId from "../../utils/getLocalUserId"
+import getLocalUser from "../../utils/getLocalUser"
 import I_Challenge from "../../../interfaces/I_Challenge"
 import "./MyChallenges.css"
 
@@ -37,7 +37,9 @@ const MyChallenges: FunctionComponent<{}> = () => {
 
         const payload: I_Challenge = {
             challengerUserId: challenge.challengerUserId,
-            challengeRecipientUserId: getLocalUserId(),
+            challengeRecipientUserId: getLocalUser().userId,
+            challengerUserName: challenge.challengerUserName,
+            challengeRecipientUserName: challenge.challengeRecipientUserName,
             width: challenge.width,
             height: challenge.height,
             ballSize: challenge.ballSize,
@@ -66,7 +68,7 @@ const MyChallenges: FunctionComponent<{}> = () => {
                 <DialogContent>
                     {challenges.map((challenge: I_Challenge, i) =>
                         <div key={i}>
-                            <div>{`Challenger ID: ${challenge.challengerUserId}`}</div>
+                            <div>{`Challenger: ${challenge.challengerUserName}`}</div>
                             <Button
                                 onClick={() => handelAcceptOrDecline(challenge, "accept")}
                                 color="primary"

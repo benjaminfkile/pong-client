@@ -1,13 +1,13 @@
 import axios from "axios"
 import stateService from "../stateManagement/StateService"
-import getLocalUserId from "../app/utils/getLocalUserId"
+import getLocalUser from "../app/utils/getLocalUser"
 import I_OnlinePlayer from "../interfaces/I_OnlinePlayer"
 
 const { updateState } = stateService
 
 const onlinePlayersCrudService = {
     getAllOnlinePlayers: async () => {
-        const userId = getLocalUserId()
+        const userId = getLocalUser().userId
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/onlinePlayers/getOnlinePlayers`)
             const onlinePlayers = response.data

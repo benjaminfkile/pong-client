@@ -1,6 +1,8 @@
 interface I_Challenge {
     challengerUserId: string
     challengeRecipientUserId: string
+    challengerUserName: string
+    challengeRecipientUserName: string
     width: number
     height: number
     ballSize: number

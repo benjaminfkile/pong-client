@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 import stateService from "../../stateManagement/StateService";
-import getLocalUserId from "../utils/getLocalUserId";
+import getLocalUser from "../utils/getLocalUser";
 
 const { updateState } = stateService
 
@@ -14,9 +14,10 @@ const socketService = {
 
       return new Promise((resolve, reject) => {
         this.socket.on("connect", () => {
-          const userId = getLocalUserId();
-          const username = null; // Replace with actual username if needed
-          this.socket.emit("join_online", { userId: userId, username: username });
+          const localUser = getLocalUser()
+          const userId = localUser.userId;
+          const username = localUser.userName
+          this.socket.emit("join_online", { userId: userId, userName: username });
           this.startHeartbeat();
           updateState("appState", [
             { key: "socketId", value: this.socket.id },
@@ -59,7 +60,7 @@ const socketService = {
 
     // Set a new interval for sending heartbeats
     socketService.heartbeatInterval = setInterval(() => {
-      socketService.emit("heartbeat", { userId: getLocalUserId() });
+      socketService.emit("heartbeat", { userId: getLocalUser() });
     }, process.env.REACT_APP_HEARTBEAT_INTERVAL ? parseInt(process.env.REACT_APP_HEARTBEAT_INTERVAL) : 15000);
   },
 

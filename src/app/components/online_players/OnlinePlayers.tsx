@@ -3,7 +3,7 @@ import stateService from "../../../stateManagement/StateService"
 import socketService from "../../socket_io/SocketService"
 import onlinePlayersCrudService from "../../../crud/OnlinePlayersCrudService"
 import I_OnlinePlayers from "../../../interfaces/I_OnlinePlayersState"
-import getLocalUserId from "../../utils/getLocalUserId"
+import getLocalUser from "../../utils/getLocalUser"
 import I_Challenge from "../../../interfaces/I_Challenge"
 import "./OnlinePlayers.css"
 
@@ -30,20 +30,17 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
     return (
         <div className="OnlinePlayers">
 
-            <p>{`local userId ${getLocalUserId()}`}</p>
-
-            <br></br>
-
-
-
             {onlinePlayers.map((player, i) =>
                 <div
                     key={i}
                     className="OnlinePlayerListitem"
                     onClick={() => {
+                        const localUser = getLocalUser()
                         const payload: I_Challenge = {
-                            challengerUserId: getLocalUserId(),
+                            challengerUserId: localUser.userId,
                             challengeRecipientUserId: player.user_id,
+                            challengerUserName: localUser.userName || "",
+                            challengeRecipientUserName: player.user_name,
                             width: 800,
                             height: 500,
                             ballSize: 15,
@@ -56,7 +53,7 @@ const OnlinePlayers: FunctionComponent<{}> = () => {
                         socketService.emit('send_challenge', payload);
                     }}
                 >
-                    {player.user_id}
+                    {player.user_name}
                     <button
                         onClick={() => null}
                     >

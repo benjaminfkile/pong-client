@@ -5,7 +5,7 @@ import socketService from "../socket_io/SocketService"
 import Paddle1 from "./game_components/paddles/Paddle1"
 import Paddle2 from "./game_components/paddles/Paddle2"
 import I_GameUpdatePayload from "../../interfaces/I_GameUpdatePayload"
-import getLocalUserId from "../utils/getLocalUserId"
+import getLocalUser from "../utils/getLocalUser"
 import Ball from "./game_components/ball/Ball"
 import I_ScorePayload from "../../interfaces/I_ScorePayload"
 import I_GameOverPayload from "../../interfaces/I_GameOverPayload"
@@ -18,7 +18,7 @@ const Game: FunctionComponent<{}> = () => {
     const { challenger, player1Y, player2Y, ballX, ballY, width, height, ballSize, paddleHeight, paddleWidth, score, winner } = state;
     const [localPaddleY, setLocalPaddleY] = useState<number>(challenger ? player1Y : player2Y);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
-    const localUserId = getLocalUserId()
+    const localUserId = getLocalUser().userId
 
     let y2Emmit = 0;
 
