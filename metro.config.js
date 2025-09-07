@@ -1,4 +1,8 @@
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const path = require("path")
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config")
+
+const projectRoot = __dirname
+const sharedRoot = path.resolve(__dirname, "../pong-shared-deps")
 
 /**
  * Metro configuration
@@ -6,6 +10,16 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const config = {
+  watchFolders: [
+    sharedRoot, // 👈 watch pong-shared-deps for changes
+  ],
+  resolver: {
+    nodeModulesPaths: [
+      path.resolve(projectRoot, "node_modules"),
+      path.resolve(sharedRoot, "node_modules"), // 👈 so dayjs etc. resolve properly
+    ],
+  },
+}
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = mergeConfig(getDefaultConfig(projectRoot), config)
